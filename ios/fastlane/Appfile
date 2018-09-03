@@ -1,0 +1,16 @@
+app_identifier("com.example.practiceFlutter") # The bundle identifier of your app
+# apple_id("[[APPLE_ID]]") # Your Apple email address
+
+for_platform :ios do
+  # app_identifier "com.example.practiceFlutter.default"
+  for_lane :inhouse do
+    app_identifier "com.example.practiceFlutter"
+  end
+
+  for_lane :beta do
+    app_identifier "com.example.practiceFlutter"
+  end
+end
+
+# For more information about the Appfile, see:
+#     https://docs.fastlane.tools/advanced/#appfile

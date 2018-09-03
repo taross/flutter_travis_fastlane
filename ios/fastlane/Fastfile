@@ -1,0 +1,35 @@
+require "yaml"
+
+fastlane_version "1.102.0"
+default_platform :ios
+
+CONF = YAML.load_file('conf.yml')
+
+platform :ios do
+  before_all do
+    ENV["SLACK_URL"] = CONF["slack"]["webhookurl"]
+  end
+
+  desc "Upload to DeployGate"
+    lane :deploygate do
+    gym
+    deploygate(
+      api_token: '47221ab085a9681c410176e2c0d8e4c8aa1b9f63', # もしくは環境変数 DEPLOYGATE_API_TOKEN にて設定可能
+      user: 'taross', # もしくは環境変数 DEPLOYGATE_USER にて設定可能
+      message: "Fastlane build #{lane_context[SharedValues::BUILD_NUMBER]}",
+    )
+  end
+
+
+
+  after_all do |lane|
+    slack(message: "Successfully")
+  end
+
+  error do |lane, exception|
+    slack(
+      message: exception.message,
+      success: false
+    )
+  end
+end
